@@ -6,6 +6,6 @@ public interface InitialValueProblem {
 	
 	public double[] getInitialState();
 	
-	public double[] getDerivative();
+	public double[] getDerivative(double time, double[] state);
 
 }
