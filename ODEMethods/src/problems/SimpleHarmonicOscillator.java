@@ -75,7 +75,8 @@ public class SimpleHarmonicOscillator implements InitialValueProblem {
 
     }
     
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
         SimpleHarmonicOscillator shoProblem = new SimpleHarmonicOscillator();
         //FixedStepMethod method = new FixedStepEulerMethod(shoProblem,1.0e-4);
 
@@ -105,7 +106,6 @@ public class SimpleHarmonicOscillator implements InitialValueProblem {
 
         
         if (false) {
-
             DisplaySolution.statePlot(solution, 0, 1, 10);
             DisplaySolution.timePlot(solution, indexes, 10);
 //            DisplaySolution.timePlot(solution);

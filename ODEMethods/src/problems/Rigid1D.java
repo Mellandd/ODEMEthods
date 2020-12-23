@@ -9,10 +9,12 @@ import methods.FixedStepMethod;
 import methods.FixedStepRungeKutta4Method;
 import methods.FixedStepTrapezoidalMethod;
 import ode.InitialValueProblem;
+import ode.SolutionObject;
 import tools.DisplaySequence;
 import tools.DisplaySolution;
 
 
+@SuppressWarnings("unused")
 public class Rigid1D implements InitialValueProblem {
 
     // ------------------
@@ -56,21 +58,23 @@ public class Rigid1D implements InitialValueProblem {
         double maxTime = 1; // Paso fijo: probar 0.2 y 0.24 para t=6 y 8. RKF : probar 2.81 y 2.82, AdapPC4: 3.6 y 3.7
         InitialValueProblem problem = new Rigid1D();
 
-        double hStep = 0.2; // Probar 0.24 y 0.25
+        double hStep = 0.1; //
         double tolerance = 1.0e-4;
         int maxIter = 100;
-//        FixedStepMethod method = new FixedStepRungeKutta4Method(problem,hStep);
-        FixedStepMethod method = new FixedStepBackwardEulerMethod(problem, hStep, tolerance, maxIter);
-        //method = new FixedStepPredictorCorrector4Method(problem,10);
-        //method = new AdaptiveStepRKFehlbergMethod(problem,hStep, tolerance);
+        FixedStepMethod method = new FixedStepTrapezoidalMethod(problem, hStep, tolerance, maxIter);
+        SolutionObject solution = method.solveInterval(0,maxTime);
+        if (solution == null) {
+            System.out.println ("Method broke!");
+            return;
+        }
+        // MUESTRA DE QUE LA SALIDA DENSA FUNCIONA.
         
-        double lastTime = method.solve(maxTime);
+        System.out.println("x[0] en punto intermedio 0.35: " + solution.getState(0.35)[0]);
+        
         DisplaySolution.listError(method.getSolution(), new TrueSol(), new int[]{0});
         if (method instanceof AdaptiveStepMethod) DisplaySequence.plot(((AdaptiveStepMethod) method).getStepList());
         System.out.println ("Evaluations ="+method.getEvaluationCounter());
-        if (Double.isNaN(lastTime)) {
-            System.out.println ("Method broke!");
-        }
+
 
     }
 }

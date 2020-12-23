@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import interpolation.HermiteInterpolator;
 import interpolation.StateFunction;
+import methods.AdaptiveStepEulerMethod;
 import methods.AdaptiveStepMethod;
 import methods.AdaptiveStepPredictorCorrector4Method;
 import methods.AdaptiveStepRK4Method;
@@ -27,6 +28,7 @@ import tools.DisplaySolution;
 /**
  * https://www.johndcook.com/blog/2020/02/08/arenstorf-orbit/
  */
+@SuppressWarnings("unused")
 public class ArenstorfOrbits implements InitialValueProblem {
     static private double sMu = 0.012277471;
     static private double sMuPrime = 1-sMu;
@@ -60,23 +62,6 @@ public class ArenstorfOrbits implements InitialValueProblem {
     // ------------------
     // End of implementation of InitialValueProblem
     // ------------------
-
-    static private double computeCrossing (InitialValueProblem problem, FixedStepMethod method,
-            NumericalSolutionPoint fromPoint, NumericalSolutionPoint toPoint, 
-            double tolerance, int index) {
-//        StateFunction interpolator = new EulerMethodInterpolator(problem, fromPoint);
-//        StateFunction interpolator = new FixedStepMethodInterpolator(method, fromPoint);
-        StateFunction interpolator = new HermiteInterpolator(problem, fromPoint, toPoint);
-        double zeroAt = BisectionMethod.findZero (interpolator, fromPoint.getTime(), toPoint.getTime(), tolerance, index);
-        if (Double.isNaN(zeroAt)) {
-            System.out.print ("Zero not found!!!");
-        }
-        else {
-            double[] zeroState = interpolator.getState(zeroAt);
-            System.out.println ("Zero at t="+zeroAt+", x="+zeroState[0]+", vx="+zeroState[1]+", y="+zeroState[2]+", vy="+zeroState[3]);
-        }        
-        return zeroAt;
-    }
     
     static private class Event1 extends Event{
 
@@ -98,7 +83,7 @@ public class ArenstorfOrbits implements InitialValueProblem {
     }
     
     public static void main(String[] args) {
-        double hStep = 1.0e-3;
+        double hStep = 5.0e-4;
         double tolerance = 1.0e-6;
         InitialValueProblem problem = new ArenstorfOrbits();
 //        FixedStepMethod method = new FixedStepPredictorCorrector4Method(problem,hStep);
@@ -108,7 +93,9 @@ public class ArenstorfOrbits implements InitialValueProblem {
 //        FixedStepMethod method = new FixedStepModifiedEulerMethod(problem,hStep);
         
         
-        SolutionObject solution = method.solveInterval(0, 20);
+        // Calculamos el intervalo y después los ceros con el evento.
+        
+        SolutionObject solution = method.solveInterval(0, sPeriod * 2.1);
         if (solution == null) {
         	System.out.println("Error, can't calculate the solution.");
         	return;
@@ -117,27 +104,6 @@ public class ArenstorfOrbits implements InitialValueProblem {
         Event1 event = new Event1(tolerance, solution);
         
         event.calculateCrossing();
-        
-//        NumericalSolutionPoint previousPoint, currentPoint;
-//        
-//        previousPoint = currentPoint = method.getSolution().getLastPoint();
-//        double time = problem.getInitialTime();
-//        while (time<sPeriod*2.3) {
-//            previousPoint = currentPoint;
-//            currentPoint = method.step();
-//            if (currentPoint==null) {
-//                System.out.println ("Method failed at t="+previousPoint.getTime()+" !!!");
-//                System.exit(2);
-//            }
-//            if (currentPoint.getState(2)*previousPoint.getState(2)<0) {
-//                computeCrossing(problem, method, previousPoint, currentPoint, 1.0e-6, 2);
-//                // Crossed axis
-//                //if (currentPoint.getTime()>sPeriod) break;
-//            }
-//            time = currentPoint.getTime();
-//        }
-//        previousPoint.print();
-//        currentPoint.print();
         
         
         System.out.println ("Evaluations ="+method.getEvaluationCounter());

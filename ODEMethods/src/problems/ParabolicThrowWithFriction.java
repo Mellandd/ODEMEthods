@@ -64,7 +64,8 @@ public class ParabolicThrowWithFriction implements InitialValueProblem {
 
     }
     
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
         InitialValueProblem problem = new ParabolicThrowWithFriction(0.0);
         FixedStepMethod method = new FixedStepEulerMethod(problem,1.0e-2);
         

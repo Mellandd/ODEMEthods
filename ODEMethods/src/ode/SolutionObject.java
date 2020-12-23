@@ -20,22 +20,21 @@ public class SolutionObject{
     public double[] getState(double time) {
     	if (time >= initialTime && time <= lastTime) {
     		double actualTime = initialTime;
+    		double previousTime = actualTime;
     		NumericalSolutionPoint actualPoint = null;
-    		int n = points.size();
-    		for (int i = 0; i < n; i++) {
-				actualPoint = points.get(i);
-				actualTime = actualPoint.getTime();
-			}
+    		NumericalSolutionPoint previousPoint = null;
     		Iterator<NumericalSolutionPoint> iterator = points.iterator();
-    		while(iterator.hasNext() && actualTime <= time) {
+    		while(iterator.hasNext() && actualTime < time) {
+    			previousPoint = actualPoint;
+    			previousTime = actualTime;
     			actualPoint = iterator.next();
     			actualTime = actualPoint.getTime();
     		}
     		if (actualTime == time) {
     			return actualPoint.getState();
     		} else {
-    			double[] pointToCalculate = actualPoint.getState().clone();
-    			interpolator.solveSingleStep(actualTime, time- actualTime, pointToCalculate);
+    			double[] pointToCalculate = previousPoint.getState().clone();
+    			interpolator.solveSingleStep(previousTime, time - actualTime, pointToCalculate);
     			return pointToCalculate;
     		}
     	} else {
@@ -53,14 +52,11 @@ public class SolutionObject{
     			actualPoint = iterator.next();
     			actualTime = actualPoint.getTime();
     		}
-    		if (actualPoint == null) {
-    			
-    		}
     		if (actualTime == time) {
     			return actualPoint.getState()[index];
     		} else {
     			double[] pointToCalculate = actualPoint.getState().clone();
-    			interpolator.solveSingleStep(actualTime, time- actualTime, pointToCalculate);
+    			interpolator.solveSingleStep(actualTime, time - actualTime, pointToCalculate);
     			return pointToCalculate[index];
     		}
     	} else {

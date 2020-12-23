@@ -24,6 +24,7 @@ import tools.DisplaySequence;
 import tools.DisplaySolution;
 
 
+@SuppressWarnings("unused")
 public class TwoBodyProblem implements InitialValueProblem {
     static private double sG = 8.6498928e-4;
 
@@ -69,6 +70,7 @@ public class TwoBodyProblem implements InitialValueProblem {
 
 		@Override
 		public void action(double time) {
+			if (currentYear >= maxYears) return;
 			String label = function.getState(time, 3)>0 ? "Aphelium  " : "Perihelium";
             System.out.println (label+" at t="+time+", x = "+function.getState(time, 0));
 			if (function.getState(time, 3)>0) {
@@ -96,11 +98,11 @@ public class TwoBodyProblem implements InitialValueProblem {
     
     
     public static void main(String[] args) {
-        double hStep = 1;
+        double hStep = 10;
         double tolerance = 1.0e-10;
 
         InitialValueProblem problem = new TwoBodyProblem();
-        FixedStepMethod method = new FixedStepAdamsBashford4Method(problem,1);
+        FixedStepMethod method = new FixedStepAdamsBashford4Method(problem,hStep);
 //        FixedStepMethod method = new AdaptiveStepRKFehlbergMethod(problem,10, tolerance);
 
 //        method = new FixedStepPredictorCorrector4Method(problem,10);

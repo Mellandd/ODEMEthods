@@ -19,7 +19,6 @@ public abstract class Event {
 	abstract protected double crossingFunction(double time);
 	
 	public void calculateCrossing() {
-		System.out.println("Entro aqui");
 		List<NumericalSolutionPoint> points = function.getList();
 		int numberCrossings = 0;
 		double time = points.get(0).getTime();
@@ -69,7 +68,6 @@ public abstract class Event {
         do {
             double middleTime  = (initialTime+finalTime)/2;
             double middleState = crossingFunction(middleTime);
-            System.out.println(middleState);
             if (Math.abs(middleState)<=tolerance) {
             	action(middleTime);
             	return;

@@ -80,6 +80,10 @@ public abstract class FixedStepMethod {
         evaluationCounter = 0;
     }
     
+    public double solveSingleStep(double time, double step, double[] state) {
+		return doStep(step, time, state);
+	}
+    
     public long getEvaluationCounter() {
         return evaluationCounter;
     }
