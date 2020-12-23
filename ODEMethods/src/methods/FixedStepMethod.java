@@ -74,10 +74,6 @@ public abstract class FixedStepMethod {
 	    return time;
 	}
 	
-	public double solveSingleStep(double time, double step, double[] state) {
-		return doStep(step, time, state);
-	}
-	
     public NumericalSolution getSolution() { return solution; }
     
     public void resetEvaluationCounter() { 
