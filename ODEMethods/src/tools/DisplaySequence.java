@@ -1,7 +1,7 @@
 package tools;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -17,7 +17,7 @@ public class DisplaySequence {
         for (int  i=0; i<x.length; i++) System.out.println ("x["+i+"] = "+x[i]);
     }
 
-    static public void plot(ArrayList<Double> list) {
+    static public void plot(List<Double> list) {
         PlotFrame frame = new PlotFrame ("n" , "x[n]" , "Sequence plot frame") ;
         frame.setSize(800,400);
         frame.setConnected(true); // sets default to connect dataset points

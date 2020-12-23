@@ -1,10 +1,12 @@
 package methods;
 
 import java.util.Iterator;
+import java.util.List;
 
 import ode.InitialValueProblem;
 import ode.NumericalSolution;
 import ode.NumericalSolutionPoint;
+import ode.SolutionObject;
 
 public abstract class FixedStepMethod {
 	
@@ -34,6 +36,23 @@ public abstract class FixedStepMethod {
 		return solution.add(time, state);
 	}
 	
+	public SolutionObject solveInterval(double initialTime, double finalTime) {
+		if (initialTime > finalTime) return null;
+		if (finalTime >= solution.getLastTime()) {
+			double time = solve(finalTime);
+			if (Double.isNaN(time)) return null;
+		} 
+		int fromIndex, toIndex;
+		List<NumericalSolutionPoint> points = solution.getList();
+		int i = 0;
+		while(points.get(i).getTime() < initialTime) i++;
+		fromIndex = i;
+		while(points.get(i).getTime() < finalTime) i++;
+		toIndex = i;
+		List<NumericalSolutionPoint> interval = solution.subList(fromIndex, toIndex + 1);
+		return new SolutionObject(interval, this);
+	}
+	
 	public double solve(double finalTime) {
 		NumericalSolutionPoint lastPoint = solution.getLastPoint();
 		double time = lastPoint.getTime();
@@ -53,6 +72,10 @@ public abstract class FixedStepMethod {
 	        }
 	    } // does nothing if mStep = 0
 	    return time;
+	}
+	
+	public double solveSingleStep(double time, double step, double[] state) {
+		return doStep(step, time, state);
 	}
 	
     public NumericalSolution getSolution() { return solution; }
@@ -87,6 +110,10 @@ public abstract class FixedStepMethod {
         }
         return maxError;
     }
-	
+    
+    public void changeStep(double step) {
+    	this.step = step;
+    }
+    
 
 }

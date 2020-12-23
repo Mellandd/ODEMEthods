@@ -59,5 +59,14 @@ public class NumericalSolution {
 		return pointList.subList(size - n, size).iterator();
 	}
 	
+	public List<NumericalSolutionPoint> subList(int fromIndex, int toIndex){
+		return pointList.subList(fromIndex, toIndex);
+	}
+	
+	public List<NumericalSolutionPoint> getList() {
+		List<NumericalSolutionPoint> list = new ArrayList<>();
+		list.addAll(pointList);
+		return list;
+	}
 
 }

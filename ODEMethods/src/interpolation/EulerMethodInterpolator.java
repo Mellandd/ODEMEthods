@@ -3,7 +3,7 @@ package interpolation;
 import ode.InitialValueProblem;
 import ode.NumericalSolutionPoint;
 
-public class EulerMethodInterpolator {
+public class EulerMethodInterpolator implements StateFunction{
     private double time;
     private double[] state, derivative;
 

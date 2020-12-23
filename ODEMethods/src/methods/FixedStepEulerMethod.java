@@ -38,15 +38,6 @@ public class FixedStepEulerMethod extends FixedStepMethod{
         return extrapolatedSolution;
     }
     
-    /**
-     * Uses Richardson extrapolation for Euler method
-     * @param problem
-     * @param maxTime
-     * @param tolerance
-     * @param initialStep
-     * @param minStepAllowed
-     * @return 
-     */
     static public NumericalSolution extrapolateToTolerance(InitialValueProblem problem, 
             double maxTime, double tolerance, 
             double initialStep, double minStepAllowed) {
