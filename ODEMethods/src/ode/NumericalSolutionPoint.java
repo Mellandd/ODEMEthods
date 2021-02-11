@@ -25,9 +25,10 @@ public class NumericalSolutionPoint {
 	}
 	
 	public void print() {
-		System.out.println("Point at t="+time+" = (" + state[0]);
+		System.out.print("Point at t="+time+" = (" + state[0]);
 		IntStream.range(1, state.length)
-			.forEach(s -> System.out.println(", "+ state[s]));
+			.forEach(s -> System.out.print(", "+ state[s]));
+		System.out.println();
 	}
 
 }
